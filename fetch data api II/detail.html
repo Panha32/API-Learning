@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  </head>
+  <body>
+    <main>
+      <div class="container py-5">
+        <button onclick="history.back()" class="btn border-0 bg-transparent">
+          <i class="fa-solid fa-arrow-left-long me-2"></i> Back
+        </button>
+        <h1 class="text-center">View Detail</h1>
+        <h3 id="title"></h3>
+        <span id="id"></span>
+        <p id="description"></p>
+      </div>
+    </main>
+ 
+    <script>
+      let id = sessionStorage.getItem("itemID");
+      fetch("https://api-crud-yrvv.onrender.com/api/tutorials/" + id)
+      .then((res) => res.json())
+      .then((json) => {
+        document.getElementById("title").innerHTML = "<span>Title : </span>" + json.title;
+        document.getElementById("id").innerHTML = "<span>Item ID : </span>" + json.id;
+        document.getElementById("description").innerHTML = "<span>Description : </span>" + json.description;
+      });
+    </script>
+  </body>
+</html>

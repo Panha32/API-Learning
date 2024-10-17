@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Action</th>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    
+    <script>
+        fetch('https://fakestoreapi.com/products')
+        .then(res=>res.json())
+        .then(json=>{
+            console.log(json);
+
+            let tr = '';
+            json.forEach(element => {
+
+                tr += `<tr>
+                    <td class='id'>${element.id}</td>
+                    <td>${element.title}</td>
+                    <td>${element.price}</td>
+                    <td><img src='${element.image}' width='100px' height='100px'></td>
+                    <td><button onclick="getDetail(this)">View Detail</button></td>
+                </tr>`;
+
+            });
+            document.querySelector('tbody').innerHTML = tr;
+        })
+
+        function getDetail(tr){
+            let id = tr.parentElement.parentElement.querySelector('.id').innerHTML;
+            sessionStorage.setItem('itemID', id);
+            location.href = 'detail.html';
+        }
+    </script>
+</body>
+</html>

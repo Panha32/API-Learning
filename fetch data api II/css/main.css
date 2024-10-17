@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+    font-family: "Rubik", sans-serif;
+}
+
+.form-control {
+    border: 1px solid #9e9c9c;
+}
+
+.btn-close:focus,
+.form-control:focus,
+#publishItem:focus,
+#publishItemEdit:focus {
+    box-shadow: none;
+}
+
+.card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} 
+
+.card .card-body .text p {
+    color: #767474 !important;
+}
+
+.image {
+    border-bottom: 1px dotted #ddd;
+}
+
+.card-title,
+#title {
+    text-transform: capitalize;
+}
+
+.wrapper-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-btn,
+.delete-btn {
+    background-color: transparent !important;
+    border: 1px solid #fca9a9;
+}
+
+.edit-btn {
+    border: 1px solid rgb(126, 126, 246);
+}

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  </head>
+  <body>
+    <main>
+      <section>
+        <div class="container py-5">
+
+          <div class="title-section pb-4 d-flex align-items-center justify-content-between">
+            <h1 class="m-0">Item List</h1>
+            <div class="group-btn">
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal">
+                <i class="fa-solid fa-plus"></i> Add Item
+              </button>
+              <button type="button" class="btn btn-outline-primary" onclick="deleteAll()">
+                <i class="fa-regular fa-trash-can text-danger"></i> Delete All
+              </button>
+            </div>
+          </div>
+
+          <!-- modal add -->
+          <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="modalLabel">Add New Product</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="titleItem" class="form-label">Title</label>
+                    <input class="form-control" id="titleItem" type="text" placeholder="Product's Name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="describeItem" class="form-label">Description</label>
+                    <textarea class="form-control" id="describeItem" placeholder="Product's Description" rows="3"></textarea>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="publishItem">
+                    <label class="form-check-label" for="publishItem">Publish Product</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" onclick="addItem()">Add Item</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- modal edit -->
+          <div class="modal fade" id="modal1" tabindex="-1" aria-labelledby="modal1Label" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="modal1Label">Edit Product</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="titleItemEdit" class="form-label">Title</label>
+                    <input class="form-control" id="titleItemEdit" type="text" placeholder="Product's Name">
+                  </div>
+                  <div class="mb-3">
+                    <label for="describeItemEdit" class="form-label">Description</label>
+                    <textarea class="form-control" id="describeItemEdit" placeholder="Product's Description" rows="3"></textarea>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="publishItemEdit">
+                    <label class="form-check-label" for="publishItemEdit">Publish Product</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" onclick="editItemNew()">Edit Item</button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row g-4">
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script>
+      function addItem() {
+        let titleItem = document.getElementById('titleItem').value;
+        let describeItem = document.getElementById('describeItem').value;
+        let publishItem = document.getElementById('publishItem');
+
+        let publishValue = publishItem.checked ? 1 : 0;
+
+        fetch("https://api-crud-yrvv.onrender.com/api/tutorials",{
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json" 
+          },
+          body:JSON.stringify(
+            {
+              title: titleItem,
+              description: describeItem,
+              published: publishValue
+            }
+          )
+        })
+        .then(res=>res.json())
+        .then(json=>{
+          console.log(json);
+
+          document.getElementById('titleItem').value = '';
+          document.getElementById('describeItem').value = '';
+          publishItem.checked = false;
+
+          let modal = document.getElementById('modal');
+          let modalInstance = bootstrap.Modal.getInstance(modal);
+          modalInstance.hide();
+
+          getData(); 
+        })
+      }
+
+      function getData() {
+        fetch("https://api-crud-yrvv.onrender.com/api/tutorials")
+        .then((res) => res.json())
+        .then((json) => {
+          let card = "";
+          json.forEach((element) => {
+            card += `<div class="col-3">
+                          <div class="card h-100">
+                              <img src="image.png" class="card-img-top image image-fluid" alt="image" />
+                              <div class="card-body">
+                                  <div class="text mb-3">
+                                    <span class="d-none id">${element.id}</span>
+                                    <span class="d-none publish1">${element.published}</span>
+                                    <h5 class="card-title">${element.title}</h5>
+                                    <p class="card-text">${element.description}</p>
+                                  </div>
+                                  <div class="wrapper-button">
+                                    <button onclick="getDetail(this)" class="btn btn-warning py-1">View Detail</button>
+                                    <div>
+                                      <button onclick="editItem(this)"
+                                        data-bs-toggle="modal" data-bs-target="#modal1"
+                                        class="h-100 rounded-2 p-1 px-2 edit-btn">
+                                        <i class="fa-regular fa-pen-to-square text-primary"></i>
+                                      </button>
+                                      <button onclick="deleteItem(this)" class="h-100 rounded-2 p-1 px-2 delete-btn">
+                                        <i class="fa-regular fa-trash-can text-danger"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>`;
+          });
+          document.querySelector('.row').innerHTML = card;
+        });
+      }
+
+      getData();
+
+      function getDetail(card){
+        let id = card.parentElement.parentElement.parentElement.querySelector('.id').innerHTML;
+        sessionStorage.setItem('itemID', id);
+        location.href = 'detail.html';
+      }
+
+      function editItem(card) {
+        let title = card.parentElement.parentElement.parentElement.querySelector('.card-title').innerHTML;
+        let describe = card.parentElement.parentElement.parentElement.querySelector('.card-text').innerHTML;
+        let publish = card.parentElement.parentElement.parentElement.querySelector('.publish1').innerHTML;
+        let publishValue = document.getElementById('publishItemEdit');
+
+        document.getElementById('titleItemEdit').value = title; 
+        document.getElementById('describeItemEdit').value = describe; 
+        let publishItem = (publish == 1)
+          ? publishValue.checked = true 
+          : publishValue.checked = false;
+
+        document.querySelector('#submit').onclick = function () {
+          let editId = document.querySelector('.id').innerHTML;
+
+          let titleItem = document.getElementById('titleItem').value;
+          let describeItem = document.getElementById('describeItem').value;
+          let publishItem = document.getElementById('publishItem');
+          let publishValue = publishItem.checked ? 1 : 0;
+
+          fetch('https://api-crud-yrvv.onrender.com/api/tutorials/' + editId,{
+              method:"PUT",
+              headers: {
+                "Content-Type": "application/json" 
+              },
+              body:JSON.stringify(
+                  {
+                    title: titleItem,
+                    description: describeItem,
+                    published: publishValue
+                  }
+              )
+          })
+          .then(res=>res.json())
+          .then(json=>{
+
+            document.getElementById('titleItem').value = '';
+            document.getElementById('describeItem').value = '';
+            publishItem.checked = false;
+
+            let modal = document.getElementById('modal1');
+            let modalInstance = bootstrap.Modal.getInstance(modal);
+            modalInstance.hide();
+
+            getData();
+          })
+          }
+      }
+
+      function editItemNew() {
+        let editId = document.querySelector('.id').innerHTML;
+
+        let titleItem = document.getElementById('titleItemEdit').value;
+        let describeItem = document.getElementById('describeItemEdit').value;
+        let publishItem = document.getElementById('publishItemEdit');
+        let publishValue = publishItem.checked ? 1 : 0;
+
+        fetch('https://api-crud-yrvv.onrender.com/api/tutorials/' + editId,{
+            method:"PUT",
+            headers: {
+              "Content-Type": "application/json" 
+            },
+            body:JSON.stringify(
+                {
+                  title: titleItem,
+                  description: describeItem,
+                  published: publishValue
+                }
+            )
+        })
+        .then(res=>res.json())
+        .then(json=>{
+
+          document.getElementById('titleItemEdit').value = '';
+          document.getElementById('describeItemEdit').value = '';
+          publishItem.checked = false;
+
+          let modal = document.getElementById('modal1');
+          let modalInstance = bootstrap.Modal.getInstance(modal);
+          modalInstance.hide();
+
+          getData();
+        })
+      }
+
+      function deleteItem(card) {
+        let del = card.parentElement.parentElement.parentElement.querySelector('.id').innerHTML;
+        fetch('https://api-crud-yrvv.onrender.com/api/tutorials/' + del,{
+          method:"DELETE"
+        })
+        .then(res=>res.json())
+        .then(json=>{
+          card.closest('.col-3').remove();
+        })
+      }
+
+      function deleteAll() {
+        fetch('https://api-crud-yrvv.onrender.com/api/tutorials/' ,{
+          method:"DELETE"
+        })
+        .then(res=>res.json())
+        .then(json=>{
+          alert("Haha all item are deleted!!!");
+          getData();
+        })
+      }
+    </script>
+  </body>
+</html>

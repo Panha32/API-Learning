@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="history.back()">Back</button>
+    <h1>View Detail</h1>
+    <p id="title"></p>
+    <p id="price"></p>
+    <p id="description"></p>
+    <img id="img">
+
+
+    <script>
+        console.log(sessionStorage.getItem('itemID'));
+
+        let id = sessionStorage.getItem('itemID');
+        fetch('https://fakestoreapi.com/products/' + id)
+        .then(res=>res.json())
+        .then(json=>{
+            document.getElementById('title').innerHTML = '<b>Title : </b>' + json.title;
+            document.getElementById('price').innerHTML = '<b>Price : </b>' + json.price;
+            document.getElementById('description').innerHTML ='<b>Description : </b>' +  json.description;
+            document.getElementById('img').src = json.image;
+        })
+    </script>
+</body>
+</html>
