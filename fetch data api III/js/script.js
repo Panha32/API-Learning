@@ -1,11 +1,19 @@
 endpoint = 'https://stuinfo.tele-ict.com/api/students';
-// endpoint = 'https://fakestoreapi.com/products';
 
 const displayImage = document.getElementById('avatarImage');
 const hiddenId = document.getElementById('hiddenId');
 
 displayImage.style.display = 'none';
-// hiddenId.style.display = 'none';
+hiddenId.style.display = 'none';
+
+function clearModalFields() {
+  document.getElementById('modalTitle').innerHTML = 'Add Student';
+  document.getElementById('id').value = '';
+  document.getElementById('name').value = '';
+  document.getElementById('shift').value = '';
+  document.getElementById('image').src = '';
+  displayImage.style.display = 'none';
+}
 
 function getAllData() {
   fetch(endpoint)
@@ -66,10 +74,6 @@ function addNew() {
   let method = id === '' ? 'POST' : 'PUT';
   let endpointUrl = id === '' ? endpoint : `${endpoint}/${id}`
 
-  // console.log(id);
-  // console.log(method);
-  // console.log(endpointUrl);
-
   fetch(endpointUrl,{
     method: method,
     headers: {"Accept": "application/json" },
@@ -79,12 +83,8 @@ function addNew() {
   .then(json=> {
     console.log(json)
 
-    document.getElementById('id').value = '';
-    document.getElementById('name').value = '';
-    document.getElementById('shift').value = '';
-    document.getElementById('avatar').value = '';
-
     let modal = document.getElementById('exampleModal');
+    modal.addEventListener('hidden.bs.modal', clearModalFields);
     let modalInstance = bootstrap.Modal.getInstance(modal);
     modalInstance.hide();
 
@@ -93,21 +93,23 @@ function addNew() {
 }
 
 function getData(card) {
-
   document.getElementById('modalTitle').innerHTML = 'Update Student';
-
   displayImage.style.display = 'block';
 
   let id = card.parentElement.parentElement.parentElement.querySelector('.id').innerHTML;
   let name = card.parentElement.parentElement.parentElement.querySelector('.card-title').innerHTML;
   let shift = card.parentElement.parentElement.parentElement.querySelector('.card-text').innerHTML;
   let image = card.parentElement.parentElement.parentElement.querySelector('.image-test').innerHTML;
-  
+
   document.getElementById('id').value = id;
   document.getElementById('name').value = name;
   document.getElementById('shift').value = shift;
   document.getElementById('image').src = image;
 }
+
+let modal = document.getElementById('exampleModal');
+modal.addEventListener('hidden.bs.modal', clearModalFields);
+
 
 function deleteItem(card) {
   let del = card.parentElement.parentElement.querySelector('.id').innerHTML;
