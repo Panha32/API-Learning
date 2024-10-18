@@ -59,7 +59,7 @@ function getAllData() {
 
 getAllData();
 
-function addNew() {
+function add_Update() {
   let id = document.getElementById("id").value;
   let name = document.getElementById("name").value;
   let shift = document.getElementById("shift").value;
