@@ -1,30 +1,32 @@
-// endpoint = 'https://mile.chandalen.dev/api/students';
-endpoint = 'https://fakestoreapi.com/products';
+endpoint = 'https://stuinfo.tele-ict.com/api/students';
+// endpoint = 'https://fakestoreapi.com/products';
 
 const displayImage = document.getElementById('avatarImage');
+const hiddenId = document.getElementById('hiddenId');
 
 displayImage.style.display = 'none';
+// hiddenId.style.display = 'none';
 
 function getAllData() {
   fetch(endpoint)
   .then(res => res.json())
   .then(json => {
-    console.log(json); 
-    if (Array.isArray(json)) {
+    console.log(json);
+
       let card = '';
-      json.forEach(element => {
+      json.data.forEach(element => {
         card += `
           <div class="col-3">
             <div class="card h-100">
               <div class="image">
-                  <span class="d-none image-test">${element.image}</span>
-                 <img src="${element.image}" class="card-img-top" alt="profile">
+                <span class="d-none image-test">${element.avarta}</span>
+                 <img src="${element.avarta}" class="card-img-top" alt="profile">
               </div>
               <div class="card-body d-flex flex-column justify-content-between">
                 <div>
                   <span class="d-none id">${element.id}</span>
-                  <h5 class="card-title">${element.title}</h5>
-                  <p class="card-text">${element.description}</p>
+                  <h5 class="card-title">${element.name}</h5>
+                  <p class="card-text">${element.class}</p>
                 </div>
                 <div class="wrapper-button gap-2 d-flex justify-content-end">
                   <button class="btn btn-outline-primary"
@@ -43,20 +45,65 @@ function getAllData() {
         `;
       });
       document.querySelector('.row').innerHTML = card;
-    }
   })
   .catch(error => console.error('Error:', error));
 }
 
 getAllData()
 
+function addNew() {
+
+  let id = document.getElementById('id').value;
+  let name = document.getElementById('name').value;
+  let shift = document.getElementById('shift').value;
+  let formData = new FormData();
+  formData.append("name", name);
+  formData.append("class", shift);
+
+  const avatar = document.querySelector("#avatar");
+  formData.append("avarta", avatar.files[0]);
+
+  let method = id === '' ? 'POST' : 'PUT';
+  let endpointUrl = id === '' ? endpoint : `${endpoint}/${id}`
+
+  // console.log(id);
+  // console.log(method);
+  // console.log(endpointUrl);
+
+  fetch(endpointUrl,{
+    method: method,
+    headers: {"Accept": "application/json" },
+    body: formData
+  })
+  .then(res=>res.json())
+  .then(json=> {
+    console.log(json)
+
+    document.getElementById('id').value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('shift').value = '';
+    document.getElementById('avatar').value = '';
+
+    let modal = document.getElementById('exampleModal');
+    let modalInstance = bootstrap.Modal.getInstance(modal);
+    modalInstance.hide();
+
+    getAllData()
+  })
+}
+
 function getData(card) {
+
+  document.getElementById('modalTitle').innerHTML = 'Update Student';
+
   displayImage.style.display = 'block';
 
+  let id = card.parentElement.parentElement.parentElement.querySelector('.id').innerHTML;
   let name = card.parentElement.parentElement.parentElement.querySelector('.card-title').innerHTML;
   let shift = card.parentElement.parentElement.parentElement.querySelector('.card-text').innerHTML;
   let image = card.parentElement.parentElement.parentElement.querySelector('.image-test').innerHTML;
   
+  document.getElementById('id').value = id;
   document.getElementById('name').value = name;
   document.getElementById('shift').value = shift;
   document.getElementById('image').src = image;

@@ -183,42 +183,6 @@
         let publishItem = (publish == 1)
           ? publishValue.checked = true 
           : publishValue.checked = false;
-
-        document.querySelector('#submit').onclick = function () {
-          let editId = document.querySelector('.id').innerHTML;
-
-          let titleItem = document.getElementById('titleItem').value;
-          let describeItem = document.getElementById('describeItem').value;
-          let publishItem = document.getElementById('publishItem');
-          let publishValue = publishItem.checked ? 1 : 0;
-
-          fetch('https://api-crud-yrvv.onrender.com/api/tutorials/' + editId,{
-              method:"PUT",
-              headers: {
-                "Content-Type": "application/json" 
-              },
-              body:JSON.stringify(
-                  {
-                    title: titleItem,
-                    description: describeItem,
-                    published: publishValue
-                  }
-              )
-          })
-          .then(res=>res.json())
-          .then(json=>{
-
-            document.getElementById('titleItem').value = '';
-            document.getElementById('describeItem').value = '';
-            publishItem.checked = false;
-
-            let modal = document.getElementById('modal1');
-            let modalInstance = bootstrap.Modal.getInstance(modal);
-            modalInstance.hide();
-
-            getData();
-          })
-          }
       }
 
       function editItemNew() {

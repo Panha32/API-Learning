@@ -30,29 +30,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row g-4">
-                    <!-- <div class="col-3">
-                        <div class="card h-100">
-                            <div class="image">
-                                <img src="image.png" class="card-img-top" alt="profile">
-                            </div>
-                            <div class="card-body d-flex flex-column justify-content-between">
-                                <div>
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="wrapper-button gap-2 d-flex justify-content-end">
-                                    <button class="btn btn-outline-primary">
-                                        <i class="fa-regular fa-pen-to-square"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger">
-                                        <i class="fa-regular fa-trash-can"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                </div>
+                <div class="row g-4"></div>
             </div>
         </section>
     </main>
@@ -66,6 +44,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="mb-3" id="hiddenId">
+                    <input class="form-control" id="id" type="text" aria-label="">
+                </div>
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
                     <input class="form-control w-100" id="name" type="text" placeholder="" aria-label="">
@@ -83,13 +64,16 @@
                     </div>
                 </div>
                 <div>
-                    <label for="role" class="form-label">Avatar</label>
-                    <input class="form-control w-100" id="role" type="file" aria-label="">
+                    <label for="avatar" class="form-label">Avatar</label>
+                    <input class="form-control w-100" id="avatar" type="file" aria-label="">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Upload</button>
+                <button type="button" class="btn btn-primary"
+                onclick="addNew()">
+                    Upload
+                </button>
             </div>
         </div>
         </div>
