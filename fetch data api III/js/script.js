@@ -5,11 +5,9 @@ let modalInstance = new bootstrap.Modal(modalEl);
 
 const displayImage = document.getElementById("avatarImage");
 const hiddenId = document.getElementById("hiddenId");
-const hide_show = document.getElementById("hide-show");
 
 displayImage.style.display = "none";
 hiddenId.style.display = "none";
-hide_show.style.display = "none";
 
 function clearModalFields() {
   document.getElementById("modalTitle").innerHTML = "Add Student";
@@ -64,22 +62,6 @@ function getAllData() {
 
 getAllData();
 
-document.getElementById('hide-show').style.display = 'none';
-
-let file = '';
-
-document.getElementById('avatar').onchange = () => {
-  // console.log(avatar.files[0].type)
-  if(avatar.files.length === 0) return;
-  if(!['image/jpg', 'image/png'].includes(avatar.files[0].type)) {
-    hide_show.style.display = "block";
-    return;
-  }
-  hide_show.style.display = "none";
-
-  file = avatar.files[0];
-}
-
 function add_Update() {
   let id = document.getElementById("id").value;
   let name = document.getElementById("name").value;
@@ -89,8 +71,7 @@ function add_Update() {
   formData.append("class", shift);
 
   const avatar = document.querySelector("#avatar");
-  console.log(file);
-  formData.append("avarta", file);
+  formData.append("avarta", avatar.files[0]);
 
   let method = id === "" ? "POST" : "PUT";
   let endpointUrl = id === "" ? endpoint : `${endpoint}/${id}`;
