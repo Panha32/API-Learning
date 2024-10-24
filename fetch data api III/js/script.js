@@ -18,15 +18,9 @@ function clearModalFields() {
   displayImage.style.display = "none";
 }
 
-function getAllData() {
-  fetch(endpoint)
-  .then((res) => res.json())
-  .then((json) => {
-    console.log(json);
 
-    let card = "";
-    json.data.forEach((element) => {
-      card += `
+function createCard(element) {
+  return `
             <div class="col-3">
               <div class="card h-100">
                 <div class="image">
@@ -54,6 +48,17 @@ function getAllData() {
               </div>
             </div>
           `;
+}
+
+function getAllData() {
+  fetch(endpoint)
+  .then((res) => res.json())
+  .then((json) => {
+    console.log(json);
+
+    let card = "";
+    json.data.forEach((element) => {
+      card += createCard(element);
       });
     document.querySelector(".row").innerHTML = card;
   })
@@ -124,33 +129,7 @@ function search() {
     console.log(json);
       let card = "";
       json.data.forEach((element) => {
-        card += `
-          <div class="col-3">
-            <div class="card h-100">
-              <div class="image">
-                <span class="d-none image-test">${element.avarta}</span>
-                 <img src="${element.avarta}" class="card-img-top" alt="profile">
-              </div>
-              <div class="card-body d-flex flex-column justify-content-between">
-                <div>
-                  <span class="d-none id">${element.id}</span>
-                  <h5 class="card-title">${element.name}</h5>
-                  <p class="card-text">${element.class}</p>
-                </div>
-                <div class="wrapper-button gap-2 d-flex justify-content-end">
-                  <button class="btn btn-outline-primary"
-                    onclick="getData(this)">
-                    <i class="fa-regular fa-pen-to-square"></i>
-                  </button>
-                  <button class="btn btn-outline-danger"
-                    onclick="deleteItem(this)">
-                    <i class="fa-regular fa-trash-can"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
+        card += createCard(element);
       });
     document.querySelector(".row").innerHTML = card;
   });
